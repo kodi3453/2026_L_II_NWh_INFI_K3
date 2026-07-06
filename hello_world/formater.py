@@ -6,7 +6,7 @@ JSON = "json"
 SUPPORTED = [PLAIN, PLAIN_UP, PLAIN_LO, JSON]
 
 
-def get_formatted(msg, imie, format):
+def get_formatted(msg, imie, format
     if format == PLAIN:
         return plain_text(msg, imie)
     elif format == PLAIN_UP:
