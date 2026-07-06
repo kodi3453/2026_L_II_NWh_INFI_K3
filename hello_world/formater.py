@@ -31,4 +31,3 @@ def plain_text_upper_case(msg, imie):
 
 def plain_text_lower_case(msg, imie):
     return plain_text(msg.lower(), imie.lower())
-
