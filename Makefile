@@ -21,3 +21,11 @@ docker_run: docker_build
 		-d hello-world-printer
 
 .PHONY: deps lint test run docker_build docker_run
+
+TAG=$(USERNAME)/hello-world-printer-k7-2026
+
+docker_push: docker_build
+	@docker login --username $(USERNAME) --password $${DOCKER_PASSWORD}; \
+	docker tag hello-world-printer $(TAG); \
+	docker push $(TAG); \
+	docker logout;
