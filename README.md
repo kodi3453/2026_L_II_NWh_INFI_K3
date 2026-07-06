@@ -3,84 +3,137 @@
 Aplikacja Dydaktyczna wyświetlająca imię i wiadomość w różnych formatach dla zajęć
 o Continuous Integration, Continuous Delivery i Continuous Deployment.
 
-- W projekcie wykorzystamy virtual environment, dla utworzenia hermetycznego środowisko dla aplikacji:
+- W projekcie wykorzystujemy virtual environment, aby stworzyć hermetyczne środowisko dla aplikacji:
 
-  ```
-  # tworzymy hermetyczne środowisko dla bibliotek aplikacji:
-  $ python -m venv .venv
+tworzymy hermetyczne środowisko dla bibliotek aplikacji:
 
-  # aktywowanie hermetycznego środowiska
-  $ source .venv/Source/activate
-  $ pip install -r requirements.txt
-  $ pip install -r test_requirements.txt
+$ python -m venv .venv
 
-  # zobacz
-  $ pip list
-  ```
+aktywowanie hermetycznego środowiska
 
-  Sprawdź: [tutorial venv](https://docs.python.org/3/tutorial/venv.html) oraz [biblioteki flask](http://flask.pocoo.org).
+$ source .venv/Scripts/activate # Windows (Git Bash)
 
-- Uruchamianie applikacji:
+lub:
 
-  ```
-  # jako zwykły program
-  $ python main.py
+$ source .venv/bin/activate # Linux/Mac
 
-  # albo:
-  $ PYTHONPATH=. FLASK_APP=hello_world flask run
-  ```
+$ pip install -r requirements.txt
+$ pip install -r test_requirements.txt
 
-- Uruchamianie testów (see: http://doc.pytest.org/en/latest/capture.html):
+sprawdzenie zainstalowanych pakietów
 
-  ```
-  $ PYTHONPATH=. py.test
-  $ PYTHONPATH=. py.test --verbose -s
-  ```
+$ pip list
 
-- Kontynuując pracę z projektem, aktywowanie hermetycznego środowiska dla aplikacji py:
 
-  ```
-  # deaktywacja
-  $ deactivate
-  ```
+Sprawdź: https://docs.python.org/3/tutorial/venv/ oraz https://flask.palletsprojects.com/
 
-  ```
-  ...
+---
 
-  # aktywacja 
-  $ source .venv/Source/activate
-  ```
+## Uruchamianie aplikacji
 
-- Integracja z TravisCI:
+jako zwykły program
 
-  ```
-  # miejsce na twoje notatki
-  ```
+$ python main.py
 
-# Pomocnicze
+albo przez Flask:
 
-## Ubuntu
+$ PYTHONPATH=. FLASK_APP=hello_world flask run
 
-- Instalacja dockera: [dockerce howto](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
-## Centos
+---
 
-- Instalacja docker-a:
+## Uruchamianie testów
 
-  ```
-  $ yum remove docker \
-        docker-common \
-        container-selinux \
-        docker-selinux \
-        docker-engine
 
-  $ yum install -y yum-utils
+$ PYTHONPATH=. pytest -v
+$ PYTHONPATH=. pytest -v -s
 
-  $ yum-config-manager \
-      --add-repo \
-      https://download.docker.com/linux/centos/docker-ce.repo
 
-  $ yum makecache fast
-  $ yum install -y docker-ce
-  $ systemctl start docker
-  ```
+---
+
+## Makefile (single point of entry)
+
+Projekt wykorzystuje Makefile jako centralne miejsce uruchamiania komend:
+
+
+$ make deps # instalacja zależności
+$ make lint # sprawdzenie jakości kodu (flake8)
+$ make test # uruchomienie testów
+$ make run # uruchomienie aplikacji
+$ make docker_build # budowa obrazu Docker
+$ make docker_push # wysłanie obrazu do Docker Hub
+
+
+---
+
+## Docker
+
+Budowanie obrazu:
+
+
+$ make docker_build
+
+
+Uruchomienie kontenera:
+
+
+$ docker run -p 5000:5000 hello-world-printer
+
+
+---
+
+## CI/CD – CircleCI
+
+Projekt wykorzystuje CircleCI do automatyzacji procesu:
+
+- instalacja zależności (`make deps`)
+- linting kodu (`make lint`)
+- testy (`make test`)
+- budowa obrazu Docker (`make docker_build`)
+- publikacja obrazu do Docker Hub (`make docker_push`)
+
+Pipeline uruchamia się automatycznie po każdym pushu do repozytorium.
+
+---
+
+## Kontynuacja pracy
+
+
+$ deactivate
+
+
+---
+
+## Pomocnicze
+
+### Ubuntu / Docker
+
+- Instalacja Docker:
+https://docs.docker.com/engine/install/
+
+---
+
+## CentOS / Docker
+
+
+$ yum remove docker
+docker-common
+container-selinux
+docker-selinux
+docker-engine
+
+$ yum install -y yum-utils
+
+$ yum-config-manager
+--add-repo
+https://download.docker.com/linux/centos/docker-ce.repo
+
+$ yum makecache fast
+$ yum install -y docker-ce
+$ systemctl start docker
+
+---
+
+## Integracja z CI/CD
+
+Projekt nie używa już TravisCI — zastąpiony został przez CircleCI, który automatyzuje cały pipeline budowania, testowania i wdrażania aplikacji.
