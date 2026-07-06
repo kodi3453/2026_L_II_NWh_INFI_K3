@@ -2,7 +2,7 @@ from hello_world import app
 from hello_world.formater import get_formatted, SUPPORTED
 from flask import request
 
-moje_imie = "Konrad" 
+moje_imie = "Konrad"
 msg = "Hello World!"
 
 
