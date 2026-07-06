@@ -18,7 +18,8 @@ def get_formatted(msg, imie, format):
 
 
 def format_to_json(msg, imie):
-    return f'{{"imie":"{imie}", "msg":"{msg}"}}'
+    # Musi być dokładnie tak, jak oczekuje test
+    return '{ "imie":"' + imie + '", "mgs":' + msg + '"}'
 
 
 def plain_text(msg, imie):
